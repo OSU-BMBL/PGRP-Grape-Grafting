@@ -1,0 +1,11 @@
+{
+  "_comment" :
+  "Below READS section shows the configuration for a directory containing reads in the format: /{PATH}/SRR{LIBRARY}_1.fastq",
+  "reads":
+  {
+      "extension": "fastq.gz",
+      "forward_read_id": "R1",
+      "path": "/path/to/reads",
+      "prefix": ""
+  },
+}
