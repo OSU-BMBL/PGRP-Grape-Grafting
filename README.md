@@ -15,6 +15,8 @@ snakemake -n --configfile config.json
 snakemake --rulegraph --configfile config.json | dot -Tpng -Gdpi=300 > images/rule-graph.png
 ```
 
+<img src="images/rule-graph" height="500" />
+
 ## Create Directed Acyclic Graph (DAG)
 ```bash
 snakemake --dag --configfile config.json | dot -Tpng -Gdpi=300 > images/dag.png
