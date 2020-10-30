@@ -6,6 +6,6 @@
       "extension": "fastq.gz",
       "forward_read_id": "R1",
       "path": "/path/to/reads",
-      "prefix": "11775_5751_"
+      "prefix": ""
   },
 }
