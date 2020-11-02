@@ -69,7 +69,7 @@ rule trim_reads:
     params:
         options = BBDUK_OPTIONS
     log:
-        TRIMMED_READS + "{raw_reads}.log"
+        TRIMMED_READS + "{raw_reads}{raw_ends}.log"
     message:
         "Using Single End Trimming"
     threads:
@@ -79,7 +79,7 @@ rule trim_reads:
 
 rule fastqc_trimmed:
     input:
-        rules.trim_reads.output
+        reads = rules.trim_reads.output
     output:
         html = TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}_fastqc.html",
         zip  = TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}_fastqc.zip"
