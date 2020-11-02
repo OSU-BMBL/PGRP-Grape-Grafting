@@ -9,6 +9,7 @@
       "prefix": ""
   },
   "bbduk":{
-    "options": "ref={input.adapter} k=23 mink=11 hdist=1 tbo tpe ktrim=l"
+    "options": "ref={input.adapter} k=23 mink=11 hdist=1 tbo tpe ktrim=l",
+    "version": "38.18"
   }
 }
