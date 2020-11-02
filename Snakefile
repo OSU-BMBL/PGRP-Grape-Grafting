@@ -23,22 +23,27 @@ CPUS_TRIMMING = 5
 ####### Output directories #######
 LOGS = "0.LOGS/"
 RAW_FASTQC = "1.QC.RAW/"
+TRIMMED_READS = "2.TRIMMED/"
+TRIMMED_READS_FASTQC = "3.QC.TRIMMED/"
 REPORTS = "999.REPORTS/"
 
 ####### Rules #######
 rule all:
     input:
         expand(RAW_FASTQC + "{raw_reads}{raw_ends}_fastqc.{format}",
+            raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"]),
+        expand(TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}_fastqc.{format}",
             raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"])
         # expand(RAW_FASTQC + "{raw_reads}{raw_ends}_fastqc.{format}",
         #     raw_reads = LIBS, raw_ends = [1, 2], format = ["html","zip"])
     output:
-        expand(REPORTS + "Report_{step}.html", step = ["FastQC_Raw"])
+        expand(REPORTS + "Report_{step}.html", step = ["FastQC_Raw", "FastQC_Trimmed"])
     params:
         logs 	= directory(LOGS),
         reports	= directory(REPORTS)
     run:
         shell("multiqc -f -o {params.reports} -n Report_FastQC_Raw.html -d " + RAW_FASTQC)
+        shell("multiqc -f -o {params.reports} -n Report_FastQC_Trimmed.html -d " + TRIMMED_READS_FASTQC)
 
 rule fastqc_raw:
     input:
@@ -71,3 +76,18 @@ rule trim_reads:
         CPUS_TRIMMING
     shell:
         "bbduk.sh threads={threads} in={input.reads} out={output} {params.options} 2> {log}"
+
+rule fastqc_trimmed:
+    input:
+        rules.trim_reads.output
+    output:
+        html = TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}_fastqc.html",
+        zip  = TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}_fastqc.zip"
+    message:
+        "FastQC on trimmed data"
+    log:
+        TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}.log"
+    threads:
+        CPUS_FASTQC
+    shell:
+        "fastqc -o " + TRIMMED_READS_FASTQC + " -t {threads} {input.reads} 2> {log}"
