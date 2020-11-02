@@ -3,3 +3,4 @@ conda activate pgrp-grape
 conda install -c bioconda snakemake -y
 conda install -c bioconda fastqc -y
 conda install -c bioconda multiqc -y
+conda install -c bioconda bbmap -y
