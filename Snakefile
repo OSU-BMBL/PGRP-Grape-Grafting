@@ -65,7 +65,7 @@ rule trim_reads:
         adapter = os.path.join(ADAPTER_PATH, "../opt/bbmap-" + BBDUK_VERSION + "/resources/"),
         reads = READS_PATH + "{raw_reads}{raw_ends}." + EXTENSION
     output:
-        TRIMMED_READS + "{raw_reads}{raw_ends." + EXTENSION
+        TRIMMED_READS + "{raw_reads}{raw_ends}." + EXTENSION
     params:
         options = BBDUK_OPTIONS
     log:
