@@ -135,7 +135,7 @@ rule alignment:
 
 rule read_counts:
 	input:
-		aligned = expand(rules.star.output.aligned_bam, raw_reads = LIBS, raw_ends = RAW_ENDS),
+		aligned = expand(rules.alignment.output.aligned_bam, raw_reads = LIBS, raw_ends = RAW_ENDS),
 		genome = rules.genome_index.input.genome_files[1]
 	output:
 		readCounts = "readCounts.txt"
