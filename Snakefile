@@ -20,6 +20,7 @@ BBDUK_VERSION = config["bbduk"]["version"]
 CPUS_FASTQC = 4
 CPUS_TRIMMING = 5
 CPUS_STAR = 20
+CPUS_READCOUNTS = 5
 
 ####### Output directories #######
 REF_GENOME = "GENOME/"
@@ -41,9 +42,8 @@ rule all:
         expand(RAW_FASTQC + "{raw_reads}{raw_ends}_fastqc.{format}",
             raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"]),
         expand(TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}_fastqc.{format}",
-            raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"])
-        # expand(RAW_FASTQC + "{raw_reads}{raw_ends}_fastqc.{format}",
-        #     raw_reads = LIBS, raw_ends = [1, 2], format = ["html","zip"])
+            raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"]),
+        "readCounts.txt"
     output:
         expand(REPORTS + "Report_{step}.html", step = ["FastQC_Raw", "FastQC_Trimmed"])
     params:
@@ -132,3 +132,16 @@ rule alignment:
 		CPUS_STAR
 	shell:
 		"STAR --runThreadN {threads} --genomeDir {input.genome} --readFilesIn {input.reads} --readFilesCommand gunzip -c --outFilterIntronMotifs RemoveNoncanonical --outFileNamePrefix {params.prefix} --outSAMtype BAM SortedByCoordinate --outReadsUnmapped  Fastx 2> {log}"
+
+rule read_counts:
+	input:
+		aligned = expand(rules.star.output.aligned_bam, raw_reads = LIBS, raw_ends = RAW_ENDS),
+		genome = rules.genome_index.input.genome_files[1]
+	output:
+		readCounts = "readCounts.txt"
+	log:
+		"read_counts.log"
+	threads:
+		CPUS_READCOUNTS
+	shell:
+		"featureCounts -a {input.genome} -o {output} -T {threads} {input.aligned} 2> {log}"
