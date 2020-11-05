@@ -26,9 +26,15 @@ def loadGenome(ref):
     with open(ref) as genome_data:
         data = json.load(genome_data)
         for i in data.keys():
-            if(i.endswith(".fa.gz") and (FA is None)):
+            if((i.endswith(".fa.gz") or
+                i.endswith(".fasta.gz") or
+                i.endswith(".fa") or
+                i.endswith(".fasta")) and (FA is None)):
                 FA = Path(i).stem
-            elif((i.endswith(".gtf.gz") or i.endswith(".gff3.gz")) and (GTF is None)):
+            elif((i.endswith(".gtf.gz") or
+                  i.endswith(".gff3.gz") or
+                  i.endswith(".gtf") or
+                  i.endswith(".gff3") or) and (GTF is None)):
                 GTF = Path(i).stem
 
     if((FA is None) and (GTF is None)):
