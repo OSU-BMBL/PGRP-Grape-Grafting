@@ -29,16 +29,14 @@ def loadGenome(ref):
     with open(ref) as genome_data:
         data = json.load(genome_data)
         for i in data.keys():
-            if((i.endswith(".fa.gz") or
-                i.endswith(".fasta.gz") or
-                i.endswith(".fa") or
+            if (i.endswith(".gz") or i.endswith(".gzip")):
+                i = Path(i).stem
+            if((i.endswith(".fa") or
                 i.endswith(".fasta")) and (FA is None)):
-                FA = Path(i).stem
-            elif((i.endswith(".gtf.gz") or
-                  i.endswith(".gff3.gz") or
-                  i.endswith(".gtf") or
+                FA = i
+            elif((i.endswith(".gtf") or
                   i.endswith(".gff3")) and (GTF is None)):
-                GTF = Path(i).stem
+                GTF = i
 
     if((FA is None) and (GTF is None)):
         raise ValueError("reference genome file wrongly formatted")
