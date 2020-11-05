@@ -113,3 +113,22 @@ rule genome_index:
 		CPUS_STAR
 	shell:
 		"mkdir -p {output.dir} && STAR --runThreadN {threads} --runMode genomeGenerate --genomeDir {output} --genomeFastaFiles {input.genome_files[0]}  --sjdbGTFfile {input.genome_files[1]} --sjdbOverhang 50 2> {log}"
+
+rule alignment:
+	input:
+		genome = rules.genome_index.output.dir,
+		reads = rules.trim_reads.output
+	output:
+		unmapped_m81 = ALIGNMENT + "{raw_reads}{raw_ends}_Unmapped.out.mate1",
+		unmapped_m82 = ALIGNMENT + "{raw_reads}{raw_ends}_Unmapped.out.mate2",
+		aligned_bam  = ALIGNMENT + "{raw_reads}{raw_ends}_Aligned.sortedByCoord.out.bam"
+	message:
+		"STAR alignment"
+	log:
+		ALIGNMENT + "{raw_reads}{raw_ends}.log"
+	params:
+		prefix = ALIGNMENT + "{raw_reads}{raw_ends}_"
+	threads:
+		CPUS_STAR
+	shell:
+		"STAR --runThreadN {threads} --genomeDir {input.genome} --readFilesIn {input.reads} --readFilesCommand gunzip -c --outFilterIntronMotifs RemoveNoncanonical --outFileNamePrefix {params.prefix} --outSAMtype BAM SortedByCoordinate --outReadsUnmapped  Fastx 2> {log}"
