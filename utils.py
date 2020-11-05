@@ -34,7 +34,7 @@ def loadGenome(ref):
             elif((i.endswith(".gtf.gz") or
                   i.endswith(".gff3.gz") or
                   i.endswith(".gtf") or
-                  i.endswith(".gff3") or) and (GTF is None)):
+                  i.endswith(".gff3")) and (GTF is None)):
                 GTF = Path(i).stem
 
     if((FA is None) and (GTF is None)):
