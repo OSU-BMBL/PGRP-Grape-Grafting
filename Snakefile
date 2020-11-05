@@ -1,5 +1,5 @@
 ####### Libraries #######
-from utils import findLibraries, which, extractFilenames
+from utils import findLibraries, loadGenome, verifyGenome, which
 
 ####### Global variables #######
 EXTENSION = config["reads"]["extension"]
@@ -31,8 +31,9 @@ ALIGNMENT = "4.ALIGNMENT/"
 REPORTS = "999.REPORTS/"
 
 ####### Reference datasets #######
-GENOME4STAR = config["genome4star"]
-GENOME4STAR_FILENAMES = extractFilenames(GENOME4STAR.keys(), ".gz")
+FA,GTF = loadGenome(config["genome"])
+GENOME_FILENAMES = {"FA":FA,"GTF":GTF}
+verifyGenome(config["genome"],REF_GENOME + FA, REF_GENOME + GTF)
 
 ####### Rules #######
 rule all:
@@ -101,7 +102,7 @@ rule fastqc_trimmed:
 
 rule genome_index:
 	input:
-		genome_files = expand(REF_GENOME + "{genome_file}", genome_file = GENOME4STAR_FILENAMES)
+		genome_files = expand(REF_GENOME + "{genome_file}", genome_file = GENOME_FILENAMES)
 	output:
 		dir = directory(REF_GENOME + "GENOME_INDEX")
 	message:
