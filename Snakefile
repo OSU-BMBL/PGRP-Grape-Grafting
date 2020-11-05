@@ -102,7 +102,7 @@ rule fastqc_trimmed:
 
 rule genome_index:
 	input:
-		genome_files = expand(REF_GENOME + "{genome_file}", genome_file = GENOME_FILENAMES)
+		genome_files = expand(REF_GENOME + "{genome_file}", genome_file = GENOME_FILENAMES.values())
 	output:
 		dir = directory(REF_GENOME + "GENOME_INDEX")
 	message:
