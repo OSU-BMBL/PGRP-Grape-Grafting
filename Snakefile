@@ -1,5 +1,5 @@
 ####### Libraries #######
-from utils import findLibraries, which
+from utils import findLibraries, which, extractFilenames
 
 ####### Global variables #######
 EXTENSION = config["reads"]["extension"]
@@ -19,13 +19,20 @@ BBDUK_VERSION = config["bbduk"]["version"]
 ###### Multithread configuration #####
 CPUS_FASTQC = 4
 CPUS_TRIMMING = 5
+CPUS_STAR = 20
 
 ####### Output directories #######
+REF_GENOME = "GENOME/"
 LOGS = "0.LOGS/"
 RAW_FASTQC = "1.QC.RAW/"
 TRIMMED_READS = "2.TRIMMED/"
 TRIMMED_READS_FASTQC = "3.QC.TRIMMED/"
+ALIGNMENT = "4.ALIGNMENT/"
 REPORTS = "999.REPORTS/"
+
+####### Reference datasets #######
+GENOME4STAR = config["genome4star"]
+GENOME4STAR_FILENAMES = extractFilenames(GENOME4STAR.keys(), ".gz")
 
 ####### Rules #######
 rule all:
@@ -91,3 +98,17 @@ rule fastqc_trimmed:
         CPUS_FASTQC
     shell:
         "fastqc -o " + TRIMMED_READS_FASTQC + " -t {threads} {input.reads} 2> {log}"
+
+rule genome_index:
+	input:
+		genome_files = expand(REF_GENOME + "{genome_file}", genome_file = GENOME4STAR_FILENAMES)
+	output:
+		dir = directory(REF_GENOME + "GENOME_INDEX")
+	message:
+		"Generate genome index for STAR"
+	log:
+		REF_GENOME + "genome_index.log"
+	threads:
+		CPUS_STAR
+	shell:
+		"mkdir -p {output.dir} && STAR --runThreadN {threads} --runMode genomeGenerate --genomeDir {output} --genomeFastaFiles {input.genome_files[0]}  --sjdbGTFfile {input.genome_files[1]} --sjdbOverhang 50 2> {log}"
