@@ -22,6 +22,20 @@ snakemake --rulegraph --configfile config.json | dot -Tpng -Gdpi=300 > images/ru
 snakemake --dag --configfile config.json | dot -Tpng -Gdpi=300 > images/dag.png
 ```
 
+## Download Reference Genome
+The helper script called `download.genome.py`, can be used to download a reference genome, it only needs a JSON file with the following format:
+```bash
+{
+  "VvChar04_v1.fasta":
+    "http://169.237.73.197/Chardonnay04/downloads/VvChar04_v1.fasta",
+  "VvChar04_v1.gff3":
+    "http://169.237.73.197/Chardonnay04/downloads/VvChar04_v1.gff3"
+}
+```
+
+```bash
+python download.genome.py genomes/vitis-vinifera-cv-chardonnay.json
+```
 
 ## HPC cluster execution
 ### South Dakota State University: Roaring Thunder

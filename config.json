@@ -1,15 +1,16 @@
 {
+  "bbduk":{
+    "options": "ref={input.adapter} k=23 mink=11 hdist=1 tbo tpe ktrim=l",
+    "version": "38.18"
+  },
+  "genome" : "genomes/vitis-vinifera-cv-chardonnay.json",
   "_comment" :
-  "Below READS section shows the configuration for a directory containing reads in the format: /{PATH}/SRR{LIBRARY}_1.fastq",
+  "Below READS section shows the configuration for a directory containing reads in the format: /{PATH}/{PREFIX}{LIBRARY}_{FORWARD_READ_ID}.{EXTENSION}",
   "reads":
   {
       "extension": "fastq.gz",
       "forward_read_id": "R1",
       "path": "/path/to/reads",
       "prefix": ""
-  },
-  "bbduk":{
-    "options": "ref={input.adapter} k=23 mink=11 hdist=1 tbo tpe ktrim=l",
-    "version": "38.18"
   }
 }

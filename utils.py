@@ -1,5 +1,8 @@
 ####### Libraries #######
+from itertools import product
+from pathlib import Path
 import glob
+import json
 import os
 
 ####### Util functions #######
@@ -17,6 +20,45 @@ def findLibraries(path,prefix,suffix):
 	    if(library not in names):
 		    names.append(library)
 	return sorted(names)
+
+def loadGenome(ref):
+    if(not ref.endswith(".json")):
+        raise ValueError("expecting file with .json format for the reference genome")
+    FA = None
+    GTF = None
+    with open(ref) as genome_data:
+        data = json.load(genome_data)
+        for i in data.keys():
+            if (i.endswith(".gz") or i.endswith(".gzip")):
+                i = Path(i).stem
+            if((i.endswith(".fa") or
+                i.endswith(".fasta")) and (FA is None)):
+                FA = i
+            elif((i.endswith(".gtf") or
+                  i.endswith(".gff3")) and (GTF is None)):
+                GTF = i
+
+    if((FA is None) and (GTF is None)):
+        raise ValueError("reference genome file wrongly formatted")
+    elif(FA is None):
+        raise ValueError("reference genome NOT found")
+    elif(GTF is None):
+        raise ValueError("gene annotation NOT found")
+    return FA, GTF
+
+def verifyGenome(ref,fa,gtf):
+    existsFA = os.path.exists(fa)
+    existsGTF = os.path.exists(gtf)
+
+    if(not existsFA and not existsGTF):
+        raise ValueError("the reference genome and gene annotation file don't exist\n"+
+        "please run the following command: \n\tpython download.genome.py " + ref)
+    elif(not existsFA):
+        raise ValueError("the reference genome file doesn't exist\n"+
+        "please run the following command: \n\tpython download.genome.py " + ref)
+    elif(not existsGTF):
+        raise ValueError("the gene annotation file doesn't exist\n"+
+        "please run the following command: \n\tpython download.genome.py " + ref)
 
 def which(file):
         for path in os.environ["PATH"].split(os.pathsep):
