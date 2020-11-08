@@ -4,6 +4,10 @@
 ```bash
 bash setup.sh
 ```
+> Note: If you are using Ohio Super Computer (OSC), please run the following to set up environment
+> ```bash
+> bash setup_osc.sh
+> ```
 
 ## Running (dry-run)
 ```bash
