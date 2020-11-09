@@ -1,9 +1,9 @@
 #/bin/bash
 
 # The bash script is used for Ohio Super Computer(OSC) environment.
-conda create -n pgrp-grape -y
+conda create -n grape python=3.7 -y
 source activate pgrp-grape
-conda install -c bioconda snakemake -y
+conda install -c bioconda -c conda-forge snakemake -y
 conda install -c bioconda fastqc -y
 conda install -c bioconda bbmap -y
 conda install -c bioconda star -y
