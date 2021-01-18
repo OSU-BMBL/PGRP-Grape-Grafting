@@ -138,6 +138,8 @@ rule alignment:
 		# unmapped_m82 = ALIGNMENT + "{raw_reads}{raw_ends}_Unmapped.out.mate2",
 		# aligned_bam  = ALIGNMENT + "{raw_reads}{raw_ends}_Aligned.sortedByCoord.out.bam"
 		ALIGNMENT + "{raw_reads}{raw_ends}_sorted.sam"
+	params:
+		ref = rules.genome_index.params.genome_files[0]
 	message:
 		"BWA alignment"
 	log:
@@ -147,7 +149,7 @@ rule alignment:
 	threads:
 		CPUS_BWA
 	shell:
-        	"bwa mem -t {threads} {input.genome} {input.reads} -o {output} 2> {log}"
+        	"bwa mem -t {threads} {input.genome}/{params.ref} {input.reads} -o {output} 2> {log}"
 		# "STAR --runThreadN {threads} --genomeDir {input.genome} --readFilesIn {input.reads} --readFilesCommand gunzip -c --outFilterIntronMotifs RemoveNoncanonical --outFileNamePrefix {params.prefix} --outSAMtype BAM SortedByCoordinate --outReadsUnmapped  Fastx 2> {log}"
 
 rule sam2bam:
