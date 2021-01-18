@@ -114,10 +114,11 @@ rule fastqc_trimmed:
 
 rule genome_index:
 	input:
-		genome_files = expand(REF_GENOME + "{genome_file}", genome_file = GENOME_FILENAMES.values()),
-        	genome_files2 = expand("{genome_file}", genome_file = GENOME_FILENAMES.values())
+		genome_files = expand(REF_GENOME + "{genome_file}", genome_file = GENOME_FILENAMES.values())
 	output:
 		dir = directory(REF_GENOME + "GENOME_INDEX")
+    params:
+        genome_files = expand("{genome_file}", genome_file = GENOME_FILENAMES.values())
 	message:
 		"Generate genome index for BWA"
 	log:
@@ -125,7 +126,7 @@ rule genome_index:
 	# threads:
 	# 	CPUS_BWA
 	shell:
-        	"mkdir -p {output.dir} && ln -sf {input.genome_files[0]} {output.dir} && bwa index {output.dir}/{input.genome_files2[0]} 2> {log}"
+        	"mkdir -p {output.dir} && ln -sf {input.genome_files[0]} {output.dir} && bwa index {output.dir}/{params.genome_files[0]} 2> {log}"
 		# "mkdir -p {output.dir} && BWA --runThreadN {threads} --runMode genomeGenerate --genomeDir {output} --genomeFastaFiles {input.genome_files[0]}  --sjdbGTFfile {input.genome_files[1]} --sjdbOverhang 50 2> {log}"
 
 rule alignment:
