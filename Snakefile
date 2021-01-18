@@ -78,7 +78,7 @@ rule trim_reads:
     params:
         options = TRIMMOMATIC_OPTIONS
     log:
-        err = TRIMMED_READS + "{raw_reads}{raw_ends}.err"
+        err = TRIMMED_READS + "{raw_reads}{raw_ends}.err",
         txt = TRIMMED_READS + "{raw_reads}{raw_ends}.txt"
     message:
         "Using Single End Trimming"
