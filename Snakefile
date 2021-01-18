@@ -126,7 +126,7 @@ rule genome_index:
 	# threads:
 	# 	CPUS_BWA
 	shell:
-        	"mkdir -p {output.dir} && ln -sf {input.genome_files[0]} {output.dir} && bwa index {output.dir}/{params.genome_files[0]} 2> {log}"
+        	"mkdir -p {output.dir} && ln -sf ../{params.genome_files[0]} {output.dir} && bwa index {output.dir}/{params.genome_files[0]} 2> {log}"
 		# "mkdir -p {output.dir} && BWA --runThreadN {threads} --runMode genomeGenerate --genomeDir {output} --genomeFastaFiles {input.genome_files[0]}  --sjdbGTFfile {input.genome_files[1]} --sjdbOverhang 50 2> {log}"
 
 rule alignment:
