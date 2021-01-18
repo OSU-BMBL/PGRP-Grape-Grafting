@@ -9,7 +9,7 @@ FORWARD_READ_ID = config["reads"]["forward_read_id"]
 SUFFIX = "_" + FORWARD_READ_ID + "." + EXTENSION
 LIBS = findLibraries(READS_PATH,PREFIX,SUFFIX)
 RAW_ENDS = "_R1"
-ADAPTER_PATH = which("trimmomatic")
+# ADAPTER_PATH = which("trimmomatic")
 try:
     TRIMMOMATIC_OPTIONS = config["trimmomatic"]["options"]
 except:
@@ -70,7 +70,7 @@ rule fastqc_raw:
 
 rule trim_reads:
     input:
-        adapter = os.path.join(ADAPTER_PATH,"../share/trimmomatic/adapters"),
+        # adapter = os.path.join(ADAPTER_PATH,"../share/trimmomatic/adapters"),
         # adapter = os.path.join(ADAPTER_PATH, "../opt/bbmap-" + TRIMMOMATIC_VERSION + "/resources/"),
         reads = READS_PATH + "{raw_reads}{raw_ends}." + EXTENSION
     output:

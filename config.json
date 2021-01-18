@@ -14,6 +14,6 @@
       "prefix": ""
   },
   "trimmomatic":{
-    "options": "ILLUMINACLIP:{input.adapter}/TruSeq3-SE.fa:2:30:10 HEADCROP:13 LEADING:30 TRAILING:30 MINLEN:20"
+    "options": "ILLUMINACLIP:$ADAPTERS/TruSeq3-SE.fa:2:30:10 HEADCROP:13 LEADING:30 TRAILING:30 MINLEN:20"
   }
 }
