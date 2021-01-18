@@ -78,13 +78,14 @@ rule trim_reads:
     params:
         options = TRIMMOMATIC_OPTIONS
     log:
-        TRIMMED_READS + "{raw_reads}{raw_ends}.log"
+        err = TRIMMED_READS + "{raw_reads}{raw_ends}.err"
+        txt = TRIMMED_READS + "{raw_reads}{raw_ends}.txt"
     message:
         "Using Single End Trimming"
     threads:
         CPUS_TRIMMING
     shell:
-        "trimmomatic SE -threads {threads} {input.reads} {output} {params.options} 2> {log}"
+        "trimmomatic SE -threads {threads} {input.reads} {output} {params.options} -trimlog {log.txt} 2> {log.err}"
         # "bbduk.sh threads={threads} in={input.reads} out={output} {params.options} 2> {log}"
 
 rule fastqc_trimmed:

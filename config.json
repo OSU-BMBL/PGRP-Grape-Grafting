@@ -12,5 +12,8 @@
       "forward_read_id": "R1",
       "path": "/path/to/reads",
       "prefix": ""
+  },
+  "trimmomatic":{
+    "options": "ILLUMINACLIP:{input.adapter}/TruSeq3-SE.fa:2:30:10 HEADCROP:13 LEADING:30 TRAILING:30 MINLEN:20"
   }
 }
