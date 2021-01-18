@@ -117,8 +117,8 @@ rule genome_index:
 		genome_files = expand(REF_GENOME + "{genome_file}", genome_file = GENOME_FILENAMES.values())
 	output:
 		dir = directory(REF_GENOME + "GENOME_INDEX")
-    params:
-        genome_files = expand("{genome_file}", genome_file = GENOME_FILENAMES.values())
+	params:
+		genome_files = expand("{genome_file}", genome_file = GENOME_FILENAMES.values())
 	message:
 		"Generate genome index for BWA"
 	log:
