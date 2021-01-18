@@ -9,7 +9,9 @@ FORWARD_READ_ID = config["reads"]["forward_read_id"]
 SUFFIX = "_" + FORWARD_READ_ID + "." + EXTENSION
 LIBS = findLibraries(READS_PATH,PREFIX,SUFFIX)
 RAW_ENDS = "_R1"
-# ADAPTER_PATH = which("trimmomatic")
+ADAPTER_PATH = which("trimmomatic")
+if (os.environ.get('ADAPTERS', '') == ''):
+    os.environ['ADAPTERS'] = os.path.join(ADAPTER_PATH,"../share/trimmomatic/adapters")
 try:
     TRIMMOMATIC_OPTIONS = config["trimmomatic"]["options"]
 except:
