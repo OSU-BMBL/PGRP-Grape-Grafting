@@ -159,7 +159,7 @@ rule sam2bam:
     message:
         "Converting SAM to BAM"
     threads:
-        CPUS_ALIGNMENT
+        CPUS_BWA
     shell:
         "samtools view -@ {threads} -bS {input} | samtools sort -@ {threads} -o {output} 2> {log}"
 
