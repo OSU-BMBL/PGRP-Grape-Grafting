@@ -177,10 +177,20 @@ rule alignment_quality:
         "samtools flagstat {input} > {output}"
         # "SAMstats --sorted_sam_file {input} --outf {output} 2> {log}"
 
+rule GFF2GTF:
+    input:
+        gff = rules.genome_index.input.genome_files[1]
+    output:
+        gtf = rules.genome_index.input.genome_files[1] + ".gft"
+    message:
+        "Convert GFF reference file to GTF"
+    shell:
+        "agat_convert_sp_gff2gtf.pl --gff {input} -o {output}"
+
 rule read_counts:
 	input:
 		aligned = expand(rules.sam2bam.output, raw_reads = LIBS, raw_ends = RAW_ENDS),
-		genome = rules.genome_index.input.genome_files[1]
+		genome = rules.GFF2GTF.output.gft
 	output:
 		readCounts = "readCounts.txt"
 	log:
@@ -188,4 +198,4 @@ rule read_counts:
 	threads:
 		CPUS_READCOUNTS
 	shell:
-		"featureCounts -a {input.genome} -o {output} -T {threads} {input.aligned} 2> {log}"
+		"featureCounts -g gene_id --primary -a {input.genome} -o {output} -T {threads} {input.aligned} 2> {log}"
