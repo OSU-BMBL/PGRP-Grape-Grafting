@@ -52,7 +52,8 @@ rule all:
             raw_reads = LIBS, raw_ends = RAW_ENDS),
         "readCounts.txt"
     output:
-        expand(REPORTS + "Report_{step}.html", step = ["FastQC_Raw", "FastQC_Trimmed"])
+        expand(REPORTS + "Report_{step}.html",
+            step = ["FastQC_Raw", "FastQC_Trimmed", "Alignment_BAM", "Alignment_flagstat"])
     params:
         logs 	= directory(LOGS),
         reports	= directory(REPORTS)
