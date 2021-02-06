@@ -191,7 +191,7 @@ rule GFF2GTF:
 rule read_counts:
 	input:
 		aligned = expand(rules.sam2bam.output, raw_reads = LIBS, raw_ends = RAW_ENDS),
-		genome = rules.GFF2GTF.output.gft
+		genome = rules.GFF2GTF.output.gtf
 	output:
 		readCounts = "readCounts.txt"
 	log:
