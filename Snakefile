@@ -47,7 +47,7 @@ rule all:
         expand(TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}_fastqc.{format}",
             raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"]),
         expand(ALIGNMENT + "{raw_reads}{raw_ends}_sorted.bam",
-            raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"]),
+            raw_reads = LIBS, raw_ends = RAW_ENDS),
         expand(ALIGNMENT_QC + "{raw_reads}{raw_ends}.flagstat_BWA.txt",
             raw_reads = LIBS, raw_ends = RAW_ENDS),
         "readCounts.txt"
