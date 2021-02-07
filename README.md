@@ -4,6 +4,13 @@
 ```bash
 bash setup.sh
 ```
+
+Alternatively,
+```bash
+conda env create -f environment.yml
+conda activate pgrp-grape
+```
+
 > Note: If you are using Ohio Super Computer (OSC), please run the following to set up environment
 > ```bash
 > module load python/3.6
