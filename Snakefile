@@ -16,7 +16,6 @@ try:
     TRIMMOMATIC_OPTIONS = config["trimmomatic"]["options"]
 except:
     raise ValueError("trimmomatic > options not found in the configuration file")
-# BBDUK_VERSION = config["bbduk"]["version"]
 
 ###### Multithread configuration #####
 CPUS_FASTQC = 4
@@ -46,21 +45,18 @@ rule all:
             raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"]),
         expand(TRIMMED_READS_FASTQC + "{raw_reads}{raw_ends}_fastqc.{format}",
             raw_reads = LIBS, raw_ends = RAW_ENDS, format = ["html","zip"]),
-        expand(ALIGNMENT + "{raw_reads}{raw_ends}_sorted.bam",
-            raw_reads = LIBS, raw_ends = RAW_ENDS),
         expand(ALIGNMENT_QC + "{raw_reads}{raw_ends}.flagstat_BWA.txt",
             raw_reads = LIBS, raw_ends = RAW_ENDS),
         "readCounts.txt"
     output:
         expand(REPORTS + "Report_{step}.html",
-            step = ["FastQC_Raw", "FastQC_Trimmed", "Alignment_BAM", "Alignment_flagstat"])
+            step = ["FastQC_Raw", "FastQC_Trimmed", "Alignment_flagstat"])
     params:
         logs 	= directory(LOGS),
         reports	= directory(REPORTS)
     run:
         shell("multiqc -f -o {params.reports} -n Report_FastQC_Raw.html -d " + RAW_FASTQC)
         shell("multiqc -f -o {params.reports} -n Report_FastQC_Trimmed.html -d " + TRIMMED_READS_FASTQC)
-        shell("multiqc -f -o {params.reports} -n Report_Alignment_BAM.html -d " + ALIGNMENT)
         shell("multiqc -f -o {params.reports} -n Report_Alignment_flagstat.html -d " + ALIGNMENT_QC)
 
 rule fastqc_raw:
@@ -80,8 +76,6 @@ rule fastqc_raw:
 
 rule trim_reads:
     input:
-        # adapter = os.path.join(ADAPTER_PATH,"../share/trimmomatic/adapters"),
-        # adapter = os.path.join(ADAPTER_PATH, "../opt/bbmap-" + TRIMMOMATIC_VERSION + "/resources/"),
         reads = READS_PATH + "{raw_reads}{raw_ends}." + EXTENSION
     output:
         TRIMMED_READS + "{raw_reads}{raw_ends}." + EXTENSION
@@ -96,7 +90,6 @@ rule trim_reads:
         CPUS_TRIMMING
     shell:
         "trimmomatic SE -threads {threads} {input.reads} {output} {params.options} -trimlog {log.txt} 2> {log.err}"
-        # "bbduk.sh threads={threads} in={input.reads} out={output} {params.options} 2> {log}"
 
 rule fastqc_trimmed:
     input:
@@ -124,8 +117,6 @@ rule genome_index:
 		"Generate genome index for BWA"
 	log:
 		REF_GENOME + "genome_index.log"
-	# threads:
-	# 	CPUS_BWA
 	shell:
         	"mkdir -p {output.dir} && ln -sf ../{params.genome_files[0]} {output.dir} && bwa index {output.dir}/{params.genome_files[0]} 2> {log}"
 		# "mkdir -p {output.dir} && BWA --runThreadN {threads} --runMode genomeGenerate --genomeDir {output} --genomeFastaFiles {input.genome_files[0]}  --sjdbGTFfile {input.genome_files[1]} --sjdbOverhang 50 2> {log}"
@@ -135,9 +126,6 @@ rule alignment:
 		genome = rules.genome_index.output.dir,
 		reads = rules.trim_reads.output
 	output:
-		# unmapped_m81 = ALIGNMENT + "{raw_reads}{raw_ends}_Unmapped.out.mate1",
-		# unmapped_m82 = ALIGNMENT + "{raw_reads}{raw_ends}_Unmapped.out.mate2",
-		# aligned_bam  = ALIGNMENT + "{raw_reads}{raw_ends}_Aligned.sortedByCoord.out.bam"
 		ALIGNMENT + "{raw_reads}{raw_ends}_sorted.sam"
 	params:
 		ref = rules.genome_index.params.genome_files[0]
@@ -200,4 +188,4 @@ rule read_counts:
 	threads:
 		CPUS_READCOUNTS
 	shell:
-		"featureCounts -g gene_id --primary -a {input.genome} -o {output} -T {threads} {input.aligned} 2> {log}"
+		"featureCounts -g transcript_id --primary -a {input.genome} -o {output} -T {threads} {input.aligned} 2> {log}"
