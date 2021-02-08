@@ -186,7 +186,8 @@ rule GFF2GTF:
     message:
         "Convert GFF reference file to GTF"
     shell:
-        "agat_convert_sp_gff2gtf.pl --gff {input} -o {output}"
+        "gffread {input} -T -o {output}"
+        # "agat_convert_sp_gff2gtf.pl --gff {input} -o {output}"
 
 rule read_counts:
 	input:
