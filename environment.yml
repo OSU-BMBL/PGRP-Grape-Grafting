@@ -58,6 +58,7 @@ dependencies:
   - future=0.18.2=py39hf3d152e_3
   - gdk-pixbuf=2.42.2=h0c95a7a_2
   - gettext=0.19.8.1=h0b5b191_1005
+  - gffread=0.12.1=h8b12597_0
   - ghostscript=9.18=1
   - giflib=5.2.1=h36c2ea0_2
   - gitdb=4.0.5=pyhd8ed1ab_1
