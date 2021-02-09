@@ -118,8 +118,7 @@ rule genome_index:
 	log:
 		REF_GENOME + "genome_index.log"
 	shell:
-        	"mkdir -p {output.dir} && ln -sf ../{params.genome_files[0]} {output.dir} && bwa index {output.dir}/{params.genome_files[0]} 2> {log}"
-		# "mkdir -p {output.dir} && BWA --runThreadN {threads} --runMode genomeGenerate --genomeDir {output} --genomeFastaFiles {input.genome_files[0]}  --sjdbGTFfile {input.genome_files[1]} --sjdbOverhang 50 2> {log}"
+		"mkdir -p {output.dir} && ln -sf ../{params.genome_files[0]} {output.dir} && bwa index {output.dir}/{params.genome_files[0]} 2> {log}"
 
 rule alignment:
 	input:
@@ -138,8 +137,7 @@ rule alignment:
 	threads:
 		CPUS_BWA
 	shell:
-        	"bwa mem -t {threads} {input.genome}/{params.ref} {input.reads} -o {output} 2> {log}"
-		# "STAR --runThreadN {threads} --genomeDir {input.genome} --readFilesIn {input.reads} --readFilesCommand gunzip -c --outFilterIntronMotifs RemoveNoncanonical --outFileNamePrefix {params.prefix} --outSAMtype BAM SortedByCoordinate --outReadsUnmapped  Fastx 2> {log}"
+		"bwa mem -t {threads} {input.genome}/{params.ref} {input.reads} -o {output} 2> {log}"
 
 rule sam2bam:
     input:
@@ -164,7 +162,6 @@ rule alignment_quality:
         "Assessing alignment quality"
     shell:
         "samtools flagstat {input} > {output}"
-        # "SAMstats --sorted_sam_file {input} --outf {output} 2> {log}"
 
 rule GFF2GTF:
     input:
@@ -175,7 +172,6 @@ rule GFF2GTF:
         "Convert GFF reference file to GTF"
     shell:
         "gffread {input} -T -o {output}"
-        # "agat_convert_sp_gff2gtf.pl --gff {input} -o {output}"
 
 rule read_counts:
 	input:
