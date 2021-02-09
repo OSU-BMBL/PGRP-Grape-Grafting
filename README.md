@@ -63,3 +63,9 @@ snakemake -j JOBS  \ # maximum number of simultaneous jobs to spawn
                             --partition={cluster.partition} 
                             --time={cluster.time}"
 ``` 
+
+### Extra
+To backup the conda environment, the following command can be executed:
+```bash
+conda env export | grep -v "^prefix: " > environment.yml
+```
