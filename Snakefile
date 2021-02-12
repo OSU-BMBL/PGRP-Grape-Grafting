@@ -16,6 +16,10 @@ try:
     TRIMMOMATIC_OPTIONS = config["trimmomatic"]["options"]
 except:
     raise ValueError("trimmomatic > options not found in the configuration file")
+try:
+    FEATURE_COUNT_OPTIONS = config["featureCounts"]["options"]
+except:
+    raise ValueError("featureCounts > options not found in the configuration file")
 
 ###### Multithread configuration #####
 CPUS_FASTQC = 4
@@ -179,9 +183,11 @@ rule read_counts:
 		genome = rules.GFF2GTF.output.gtf
 	output:
 		readCounts = "readCounts.txt"
+    params:
+        options = FEATURE_COUNT_OPTIONS
 	log:
 		"read_counts.log"
 	threads:
 		CPUS_READCOUNTS
 	shell:
-		"featureCounts -g transcript_id --primary -a {input.genome} -o {output} -T {threads} {input.aligned} 2> {log}"
+		"featureCounts {params.options} -a {input.genome} -o {output} -T {threads} {input.aligned} 2> {log}"
