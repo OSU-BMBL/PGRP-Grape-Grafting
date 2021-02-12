@@ -183,8 +183,8 @@ rule read_counts:
 		genome = rules.GFF2GTF.output.gtf
 	output:
 		readCounts = "readCounts.txt"
-    params:
-        options = FEATURE_COUNT_OPTIONS
+	params:
+		options = FEATURE_COUNT_OPTIONS
 	log:
 		"read_counts.log"
 	threads:
