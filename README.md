@@ -4,6 +4,13 @@
 ```bash
 bash setup.sh
 ```
+
+Alternatively,
+```bash
+conda env create -f environment.yml
+conda activate pgrp-grape
+```
+
 > Note: If you are using Ohio Super Computer (OSC), please run the following to set up environment
 > ```bash
 > module load python/3.6
@@ -56,3 +63,9 @@ snakemake -j JOBS  \ # maximum number of simultaneous jobs to spawn
                             --partition={cluster.partition} 
                             --time={cluster.time}"
 ``` 
+
+### Extra
+To backup the conda environment, the following command can be executed:
+```bash
+conda env export | grep -v "^prefix: " > environment.yml
+```
