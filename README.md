@@ -69,3 +69,11 @@ To backup the conda environment, the following command can be executed:
 ```bash
 conda env export | grep -v "^prefix: " > environment.yml
 ```
+
+## Contribution
+
+- [Roberto Villegas-Diaz](https://github.com/villegar)
+
+- [Sagar Patel](https://github.com/sgr308)
+
+- [Cankun Wang](https://github.com/Wang-Cankun)
