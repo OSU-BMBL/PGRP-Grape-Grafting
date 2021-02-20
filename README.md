@@ -35,7 +35,8 @@ snakemake --dag --configfile config.json | dot -Tpng -Gdpi=300 > images/dag.png
 ```
 
 ## Download Reference Genome
-The helper script called `download.genome.py`, can be used to download a reference genome, it only needs a JSON file with the following format:
+The helper script called `download.genome.py`, can be used to download a reference genome, it only needs a JSON file with the following format
+Change the genome and annotations file names if you are using other genome and annotations:
 ```bash
 {
   "VvChar04_v1.fasta":
